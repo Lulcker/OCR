@@ -1,14 +1,15 @@
 import sys
 from MainWindow import Window
-from PyQt6.QtWidgets import *
+from DataBase import DataBase
+from PyQt5.QtWidgets import *
 
 
 def main():
     app = QApplication(sys.argv)
 
-    window = Window.MainWindow()
+    data = DataBase.DataBaseCluster('SQLite/SQLiteBase.db')
+    window = Window.MainWindow(data)
     window.show()
-
     app.exec()
 
 
