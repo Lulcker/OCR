@@ -67,44 +67,86 @@ class MainWindow(QMainWindow):
         issued_by_whom.setAlignment(Qt.AlignRight)
 
         date_of_issue = QLabel("Дата выдачи:", self)
-        date_of_issue.setGeometry(900, 50, 200, 30)
+        date_of_issue.setGeometry(850, 50, 200, 30)
         date_of_issue.setFont(QFont("SansSerif", 15))
         date_of_issue.setAlignment(Qt.AlignRight)
 
         series_and_number = QLabel("Серия и номер:", self)
-        series_and_number.setGeometry(900, 90, 200, 30)
+        series_and_number.setGeometry(850, 90, 200, 30)
         series_and_number.setFont(QFont("SansSerif", 15))
         series_and_number.setAlignment(Qt.AlignRight)
 
         inn = QLabel("ИНН:", self)
-        inn.setGeometry(900, 130, 200, 30)
+        inn.setGeometry(850, 130, 200, 30)
         inn.setFont(QFont("SansSerif", 15))
         inn.setAlignment(Qt.AlignRight)
 
         snils = QLabel("СНИЛС:", self)
-        snils.setGeometry(900, 170, 200, 30)
+        snils.setGeometry(850, 170, 200, 30)
         snils.setFont(QFont("SansSerif", 15))
         snils.setAlignment(Qt.AlignRight)
 
-        #label = QLabel("", self)
-        #label.setFont(QFont("SansSerif", 15))
-        self.labels = [(QLabel("", self)) for x in range(12)]
+        # data in db
+
+        self.labels = [(QLineEdit("", self)) for x in range(12)]
 
         self.surname_bd = self.labels[0]
-        self.surname_bd.setGeometry(600, 50, 250, 30)
+        self.surname_bd.setGeometry(570, 50, 250, 30)
         self.surname_bd.setFont(QFont("SansSerif", 15))
-        #self.labels[0].setGeometry(600, 50, 250, 30)
-        self.labels[1].setGeometry(600, 90, 250, 30)
-        self.labels[2].setGeometry(600, 130, 250, 30)
-        self.labels[3].setGeometry(600, 170, 250, 30)
-        self.labels[4].setGeometry(600, 210, 250, 30)
-        self.labels[5].setGeometry(600, 250, 250, 30)
-        self.labels[6].setGeometry(1120, 290, 250, 30)
-        self.labels[7].setGeometry(1120, 50, 250, 30)
-        self.labels[8].setGeometry(1120, 90, 250, 30)
-        self.labels[9].setGeometry(1120, 130, 250, 30)
-        self.labels[10].setGeometry(1120, 170, 250, 30)
-        self.labels[11].setGeometry(100, 100, 250, 30)
+        self.surname_bd.setEnabled(False)
+
+        self.name_bd = self.labels[1]
+        self.name_bd.setGeometry(570, 90, 250, 30)
+        self.name_bd.setFont(QFont("SansSerif", 15))
+        self.name_bd.setEnabled(False)
+
+        self.patronymic_bd = self.labels[2]
+        self.patronymic_bd.setGeometry(570, 130, 250, 30)
+        self.patronymic_bd.setFont(QFont("SansSerif", 15))
+        self.patronymic_bd.setEnabled(False)
+
+        self.date_of_birth_bd = self.labels[3]
+        self.date_of_birth_bd.setGeometry(570, 170, 250, 30)
+        self.date_of_birth_bd.setFont(QFont("SansSerif", 15))
+        self.date_of_birth_bd.setEnabled(False)
+
+        self.place_of_birth_bd = self.labels[4]
+        self.place_of_birth_bd.setGeometry(570, 210, 250, 30)
+        self.place_of_birth_bd.setFont(QFont("SansSerif", 15))
+        self.place_of_birth_bd.setEnabled(False)
+
+        self.place_of_registration_bd = self.labels[5]
+        self.place_of_registration_bd.setGeometry(570, 250, 250, 30)
+        self.place_of_registration_bd.setFont(QFont("SansSerif", 15))
+        self.place_of_registration_bd.setEnabled(False)
+
+        self.issued_by_whom_bd = self.labels[7]
+        self.issued_by_whom_bd.setGeometry(570, 290, 250, 30)
+        self.issued_by_whom_bd.setFont(QFont("SansSerif", 15))
+        self.issued_by_whom_bd.setEnabled(False)
+
+        self.date_of_issue_bd = self.labels[8]
+        self.date_of_issue_bd.setGeometry(1070, 50, 250, 30)
+        self.date_of_issue_bd.setFont(QFont("SansSerif", 15))
+        self.date_of_issue_bd.setEnabled(False)
+
+        self.series_and_number_bd = self.labels[6]
+        self.series_and_number_bd.setGeometry(1070, 90, 250, 30)
+        self.series_and_number_bd.setFont(QFont("SansSerif", 15))
+        self.series_and_number_bd.setEnabled(False)
+
+        self.inn_bd = self.labels[9]
+        self.inn_bd.setGeometry(1070, 130, 250, 30)
+        self.inn_bd.setFont(QFont("SansSerif", 15))
+        self.inn_bd.setEnabled(False)
+
+        self.snils_bd = self.labels[10]
+        self.snils_bd.setGeometry(1070, 170, 250, 30)
+        self.snils_bd.setFont(QFont("SansSerif", 15))
+        self.snils_bd.setEnabled(False)
+
+        self.photo_bd = self.labels[11]
+        self.photo_bd.setGeometry(100, 100, 150, 30)
 
     def buttons(self):
 
@@ -115,18 +157,35 @@ class MainWindow(QMainWindow):
         self.button_edit = QPushButton("Редактировать", self)
         self.button_edit.setGeometry(900, 250, 150, 30)
         self.button_edit.setEnabled(False)
+        self.button_edit.clicked.connect(self.click_edit)
 
         self.button_delete = QPushButton("Удалить", self)
         self.button_delete.setGeometry(900, 290, 150, 30)
         self.button_delete.setEnabled(False)
         self.button_delete.clicked.connect(self.delete_person_button)
 
+        self.button_save = QPushButton("Сохранить", self)
+        self.button_save.setGeometry(1120, 210, 150, 30)
+        self.button_save.setEnabled(False)
+
     def click_add(self):
-        print("q")
-        self
+        pass
 
     def click_edit(self):
-        self.button_edit.setEnabled(True)
+        self.surname_bd.setEnabled(True)
+        self.name_bd.setEnabled(True)
+        self.patronymic_bd.setEnabled(True)
+        self.date_of_birth_bd.setEnabled(True)
+        self.place_of_birth_bd.setEnabled(True)
+        self.place_of_registration_bd.setEnabled(True)
+        self.issued_by_whom_bd.setEnabled(True)
+        self.date_of_issue_bd.setEnabled(True)
+        self.series_and_number_bd.setEnabled(True)
+        self.inn_bd.setEnabled(True)
+        self.snils_bd.setEnabled(True)
+
+    def click_save(self):
+        pass
 
     def eventFilter(self, source, event):
         if event.type() == QtCore.QEvent.MouseButtonPress:
@@ -136,7 +195,6 @@ class MainWindow(QMainWindow):
                 # parsing table
                 for i in range(12):
                     self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
-                    #print(self.labels[i])
 
                 if index.data():
                     self.button_edit.setEnabled(True)
@@ -175,7 +233,22 @@ class MainWindow(QMainWindow):
                 self.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
     def delete_person_button(self):
-        self.database.delete_person(self.row_to_base_id[self.index_row])
+        self.delete_messagebox()
+
+    def delete_messagebox(self):
+        self.msg_delete = QMessageBox()
+        self.msg_delete.setWindowTitle("Удаление")
+        self.msg_delete.setIcon(QMessageBox.Question)
+        self.msg_delete.setText("Вы действительно хотите удалить пользователя?")
+        self.msg_delete.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        res = self.msg_delete.exec_()
+
+        if res == QMessageBox.Yes:
+            self.database.delete_person(self.row_to_base_id[self.index_row])
+        if res == QMessageBox.Cancel:
+            pass
+
+
 
 
 

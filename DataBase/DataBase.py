@@ -25,14 +25,14 @@ class DataBaseCluster:
             photo TEXT);""")
         self.database.commit()
 
-        '''surname = "Nikolay"
-        name_ = "Venediktov"
+        '''surname = "Blin"
+        name_ = "CYDAAA"
         patronymic = "Aleksandrovich"
         date_of_birth = "14.02.2004"
         place_of_birth = "г.Москва"
         place_of_registration = "Moskow"
         series_and_number = "4518 522287"
-        issued_by_whom = "Gu MVD"
+        issued_by_whom = "Gu KKKO"
         date_of_issue = "27.02.2018"
         inn = 7676767
         snils = "37737-774"
