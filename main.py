@@ -8,6 +8,7 @@ def main():
     app = QApplication(sys.argv)
 
     data = DataBase.DataBaseCluster('SQLite/SQLiteBase.db')
+
     window = Window.MainWindow(data)
     window.show()
     app.exec()

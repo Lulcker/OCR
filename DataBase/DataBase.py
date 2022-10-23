@@ -25,10 +25,10 @@ class DataBaseCluster:
             photo TEXT);""")
         self.database.commit()
 
-        '''surname = "KIVA"
-        name_ = "DIMA"
+        '''surname = "Nikolay"
+        name_ = "Venediktov"
         patronymic = "Aleksandrovich"
-        date_of_birth =  "14.02.2004"
+        date_of_birth = "14.02.2004"
         place_of_birth = "г.Москва"
         place_of_registration = "Moskow"
         series_and_number = "4518 522287"
@@ -37,8 +37,9 @@ class DataBaseCluster:
         inn = 7676767
         snils = "37737-774"
         photo = "hfhfh"
-        mass = (surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo)
-        '''
+        person_data = (surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo)
+
+        self.insert_person(person_data)'''
 
     def insert_person(self, person_data):
         self.request.execute("""INSERT INTO persons(surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo) 
@@ -46,7 +47,11 @@ class DataBaseCluster:
         self.database.commit()
 
     def get_persons(self):
-        self.request.execute("SELECT * FROM persons;")
+        return self.request.execute("SELECT * FROM persons;")
+
+    def delete_person(self, id):
+        self.request.execute("""DELETE FROM persons WHERE id ==?;""", [id])
+        self.database.commit()
 
 
 

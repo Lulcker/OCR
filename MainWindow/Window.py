@@ -1,4 +1,5 @@
-import sqlite3
+import copy
+
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -10,15 +11,17 @@ class MainWindow(QMainWindow):
 
     def __init__(self, database):
         super(MainWindow, self).__init__()
-        self.screen_()
 
-        self.write_text_element()
+        self.screen_()
+        self.row_to_base_id = dict()
+        self.database = database
+        self.index_row = -1
         self.buttons()
 
         self.create_table()
-        self.loadData()
+        self.load_data()
 
-        self.database = database
+        self.write_text_element()
 
     def screen_(self):
         self.setWindowTitle("Scanner")
@@ -83,6 +86,26 @@ class MainWindow(QMainWindow):
         snils.setFont(QFont("SansSerif", 15))
         snils.setAlignment(Qt.AlignRight)
 
+        #label = QLabel("", self)
+        #label.setFont(QFont("SansSerif", 15))
+        self.labels = [(QLabel("", self)) for x in range(12)]
+
+        self.surname_bd = self.labels[0]
+        self.surname_bd.setGeometry(600, 50, 250, 30)
+        self.surname_bd.setFont(QFont("SansSerif", 15))
+        #self.labels[0].setGeometry(600, 50, 250, 30)
+        self.labels[1].setGeometry(600, 90, 250, 30)
+        self.labels[2].setGeometry(600, 130, 250, 30)
+        self.labels[3].setGeometry(600, 170, 250, 30)
+        self.labels[4].setGeometry(600, 210, 250, 30)
+        self.labels[5].setGeometry(600, 250, 250, 30)
+        self.labels[6].setGeometry(1120, 290, 250, 30)
+        self.labels[7].setGeometry(1120, 50, 250, 30)
+        self.labels[8].setGeometry(1120, 90, 250, 30)
+        self.labels[9].setGeometry(1120, 130, 250, 30)
+        self.labels[10].setGeometry(1120, 170, 250, 30)
+        self.labels[11].setGeometry(100, 100, 250, 30)
+
     def buttons(self):
 
         self.button_add = QPushButton("Добавить файл", self)
@@ -91,12 +114,12 @@ class MainWindow(QMainWindow):
 
         self.button_edit = QPushButton("Редактировать", self)
         self.button_edit.setGeometry(900, 250, 150, 30)
-        self.button_edit.clicked.connect(self.click_edit)
         self.button_edit.setEnabled(False)
 
         self.button_delete = QPushButton("Удалить", self)
         self.button_delete.setGeometry(900, 290, 150, 30)
         self.button_delete.setEnabled(False)
+        self.button_delete.clicked.connect(self.delete_person_button)
 
     def click_add(self):
         print("q")
@@ -109,30 +132,29 @@ class MainWindow(QMainWindow):
         if event.type() == QtCore.QEvent.MouseButtonPress:
             if event.button() == QtCore.Qt.LeftButton:
                 index = self.tableWidget.indexAt(event.pos())
-                print(index.row())
+                self.index_row = index.row()
+                # parsing table
+                for i in range(12):
+                    self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
+                    #print(self.labels[i])
+
                 if index.data():
                     self.button_edit.setEnabled(True)
                     self.button_delete.setEnabled(True)
-                    self.show_data_from_bd()
                 elif not index.data():
                     self.button_edit.setEnabled(False)
                     self.button_delete.setEnabled(False)
 
-        return super().eventFilter(source, event)
-
-
-    def show_data_from_bd(self):
-        self.surname_data = QLabel("SELECT name FROM persons;", self)
-        self.surname_data.setGeometry(600, 90, 250, 30)
-        self.surname_data.setFont(QFont("SansSerif", 15))
+        return super(MainWindow, self).eventFilter(source, event)
 
     def create_table(self):
         self.tableWidget = QTableWidget(self)
-        # self.tableWidget.setRowCount(5)
+        self.tableWidget.setRowCount(5)
         self.tableWidget.setColumnCount(12)
         self.tableWidget.setGeometry(50, 400, 1300, 350)
         self.tableWidget.setFixedSize(1300, 350)
         self.tableWidget.setObjectName("tableWidget")
+        
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
@@ -142,16 +164,21 @@ class MainWindow(QMainWindow):
         for i in range(len(self.headerLabels)):
             self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(self.headerLabels[i]))
 
-    def loadData(self):
-        connection = sqlite3.connect('SQLite/SQLiteBase.db')
-        sqlquery = "SELECT * FROM persons;"
-        result = connection.execute(sqlquery)
+    def load_data(self):
+        result = self.database.get_persons()
         self.tableWidget.setRowCount(0)
 
         for row_number, row_data in enumerate(result):
             self.tableWidget.insertRow(row_number)
+            self.row_to_base_id[row_number] = row_data[0]
             for column_number, data in enumerate(row_data[1:]):
                 self.tableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def delete_person_button(self):
+        self.database.delete_person(self.row_to_base_id[self.index_row])
+
+
+
 
 
 
