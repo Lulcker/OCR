@@ -1,5 +1,3 @@
-import copy
-
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -146,7 +144,9 @@ class MainWindow(QMainWindow):
         self.snils_bd.setEnabled(False)
 
         self.photo_bd = self.labels[11]
-        self.photo_bd.setGeometry(100, 100, 150, 30)
+        #self.photo = QLabel(self)
+        #self.photo.setPixmap(QPixmap(self.photo_bd.text()))
+        self.photo_bd.setGeometry(100, 100, 150, 200)
 
     def buttons(self):
 
@@ -167,6 +167,7 @@ class MainWindow(QMainWindow):
         self.button_save = QPushButton("Сохранить", self)
         self.button_save.setGeometry(1120, 210, 150, 30)
         self.button_save.setEnabled(False)
+        self.button_save.clicked.connect(self.click_save)
 
     def click_add(self):
         pass
@@ -184,8 +185,15 @@ class MainWindow(QMainWindow):
         self.inn_bd.setEnabled(True)
         self.snils_bd.setEnabled(True)
 
+        self.button_save.setEnabled(True)
+
+    def update_bd(self):
+        self.database.update_person([x.text() for x in self.labels], self.row_to_base_id[self.index_row])
+        for i in range(12):
+            self.tableWidget.item(self.index_row, i).setText(self.labels[i].text())
+
     def click_save(self):
-        pass
+        self.update_bd()
 
     def eventFilter(self, source, event):
         if event.type() == QtCore.QEvent.MouseButtonPress:
@@ -245,6 +253,7 @@ class MainWindow(QMainWindow):
 
         if res == QMessageBox.Yes:
             self.database.delete_person(self.row_to_base_id[self.index_row])
+            self.tableWidget.removeRow(self.index_row)
         if res == QMessageBox.Cancel:
             pass
 

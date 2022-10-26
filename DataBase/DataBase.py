@@ -25,8 +25,8 @@ class DataBaseCluster:
             photo TEXT);""")
         self.database.commit()
 
-        '''surname = "Blin"
-        name_ = "CYDAAA"
+        '''surname = "LLLLL"
+        name_ = "TTTTTTTT"
         patronymic = "Aleksandrovich"
         date_of_birth = "14.02.2004"
         place_of_birth = "г.Москва"
@@ -36,7 +36,7 @@ class DataBaseCluster:
         date_of_issue = "27.02.2018"
         inn = 7676767
         snils = "37737-774"
-        photo = "hfhfh"
+        photo = "PhotoBase/photo_1.png"
         person_data = (surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo)
 
         self.insert_person(person_data)'''
@@ -51,6 +51,11 @@ class DataBaseCluster:
 
     def delete_person(self, id):
         self.request.execute("""DELETE FROM persons WHERE id ==?;""", [id])
+        self.database.commit()
+
+    def update_person(self, mass, id):
+        self.request.execute("""UPDATE persons SET surname = ?, name_ = ?, patronymic = ?, date_of_birth = ?, place_of_birth = ?, place_of_registration = ?, series_and_number = ?, issued_by_whom = ?, date_of_issue = ?, inn = ?, snils = ?, photo = ?
+                                 WHERE id = ?""", mass + [id])
         self.database.commit()
 
 
