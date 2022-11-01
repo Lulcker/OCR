@@ -25,8 +25,8 @@ class DataBaseCluster:
             photo TEXT);""")
         self.database.commit()
 
-        '''surname = "LLLLL"
-        name_ = "TTTTTTTT"
+        '''surname = "PPPKNKN"
+        name_ = "jJDHHJ"
         patronymic = "Aleksandrovich"
         date_of_birth = "14.02.2004"
         place_of_birth = "г.Москва"
@@ -46,8 +46,8 @@ class DataBaseCluster:
                                      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""", person_data)
         self.database.commit()
 
-    def get_persons(self):
-        return self.request.execute("SELECT * FROM persons;")
+    def get_persons(self, id, limit):
+        return self.request.execute("SELECT * FROM persons WHERE id > ? LIMIT ?;", [id, limit])
 
     def delete_person(self, id):
         self.request.execute("""DELETE FROM persons WHERE id ==?;""", [id])
