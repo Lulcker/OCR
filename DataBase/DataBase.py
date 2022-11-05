@@ -25,22 +25,6 @@ class DataBaseCluster:
             photo TEXT);""")
         self.database.commit()
 
-        '''surname = "PPPKNKN"
-        name_ = "jJDHHJ"
-        patronymic = "Aleksandrovich"
-        date_of_birth = "14.02.2004"
-        place_of_birth = "г.Москва"
-        place_of_registration = "Moskow"
-        series_and_number = "4518 522287"
-        issued_by_whom = "Gu KKKO"
-        date_of_issue = "27.02.2018"
-        inn = 7676767
-        snils = "37737-774"
-        photo = "PhotoBase/photo_1.png"
-        person_data = (surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo)
-
-        self.insert_person(person_data)'''
-
     def insert_person(self, person_data):
         self.request.execute("""INSERT INTO persons(surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo) 
                                      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""", person_data)
@@ -57,6 +41,7 @@ class DataBaseCluster:
         self.request.execute("""UPDATE persons SET surname = ?, name_ = ?, patronymic = ?, date_of_birth = ?, place_of_birth = ?, place_of_registration = ?, series_and_number = ?, issued_by_whom = ?, date_of_issue = ?, inn = ?, snils = ?, photo = ?
                                  WHERE id = ?""", mass + [id])
         self.database.commit()
+
 
 
 

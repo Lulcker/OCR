@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
 
         self.row_to_base_id = list()
         self.last_id_loaded = -1
-        self.limit = 1
+        self.limit = 3
         self.index_row = -1
 
         self.screen_()
@@ -136,10 +136,10 @@ class MainWindow(QMainWindow):
         self.snils_bd.setGeometry(1070, 170, 250, 30)
         self.snils_bd.setFont(QFont("SansSerif", 15))
 
-        self.enabled_false()
-
         self.photo_bd = self.labels[11]
         self.photo_bd.setGeometry(10, 10, 100, 20)
+
+        self.enabled_false()
 
         '''self.pho = self.labels[11].text()
         self.photo = QLabel(self)
@@ -178,6 +178,11 @@ class MainWindow(QMainWindow):
         self.database.update_person([x.text() for x in self.labels], self.row_to_base_id[self.index_row])
         for i in range(12):
             self.tableWidget.item(self.index_row, i).setText(self.labels[i].text())
+        self.button_save.setEnabled(False)
+        self.button_delete.setEnabled(False)
+        self.button_edit.setEnabled(False)
+        [x.clear() for x in self.labels]
+        self.enabled_false()
 
     def click_edit(self):
         self.surname_bd.setEnabled(True)
@@ -191,6 +196,7 @@ class MainWindow(QMainWindow):
         self.series_and_number_bd.setEnabled(True)
         self.inn_bd.setEnabled(True)
         self.snils_bd.setEnabled(True)
+        self.photo_bd.setEnabled(True)
         self.button_save.setEnabled(True)
 
     def click_delete_person(self):
@@ -280,4 +286,5 @@ class MainWindow(QMainWindow):
         self.series_and_number_bd.setEnabled(False)
         self.inn_bd.setEnabled(False)
         self.snils_bd.setEnabled(False)
+        self.photo_bd.setEnabled(False)
 
