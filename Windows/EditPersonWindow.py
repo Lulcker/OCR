@@ -19,7 +19,7 @@ class EditPersonWindow(QWidget):
 
     def screen_(self):
         self.setWindowTitle("Add person")
-        self.setFixedSize(QSize(1200, 700))
+        self.setFixedSize(QSize(1200, 450))
 
     def ui_widgets(self):
         text_surname_add = QLabel("Фамилия:", self)
@@ -148,18 +148,61 @@ class EditPersonWindow(QWidget):
         self.snils_add.setObjectName("СНИЛС")
 
         self.photo_add = self.mass_labels[11]
-        self.photo_add.setGeometry(100, 50, 200, 30)
         self.photo_add.setObjectName("фото")
+        self.photo_add.close()
+
+        self.photo_person = QLabel(self)
+        self.photo_person.setGeometry(50, 70, 200, 250)
 
     def buttons(self):
 
-        self.button_add_image = QPushButton("Добавить фото\n для сканирования", self)
-        self.button_add_image.setGeometry(800, 210, 150, 40)
-        self.button_add_image.clicked.connect(self.click_add)
+        self.button_add_image_passport = QPushButton("Добавить фото паспорта\n для сканирования", self)
+        self.button_add_image_passport.setGeometry(780, 210, 170, 45)
+        self.button_add_image_passport.clicked.connect(self.click_add_img_passport)
 
-        self.save_add = QPushButton("Сохранить", self)
-        self.save_add.setGeometry(800, 260, 150, 30)
-        self.save_add.clicked.connect(self.click_save_add)
+        self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
+        self.button_add_image_inn.setGeometry(780, 265, 170, 45)
+        self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
+
+        self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
+        self.button_add_image_snils.setGeometry(780, 320, 170, 45)
+        self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
+
+        self.button_save_add = QPushButton("Сохранить", self)
+        self.button_save_add.setGeometry(1000, 210, 150, 30)
+        self.button_save_add.clicked.connect(self.click_save_add)
+
+        self.button_add_image_person = QPushButton("Добавить фото", self)
+        self.button_add_image_person.setGeometry(100, 20, 150, 30)
+        self.button_add_image_person.clicked.connect(self.click_add_photo_face)
+
+    def click_add_img_passport(self):
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+        # потом переделать, когда Ванина часть будет готова
+
+    def click_add_img_inn(self):
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+        # потом переделать, когда Ванина часть будет готова
+
+    def click_add_img_snils(self):
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+        # потом переделать, когда Ванина часть будет готова
+
+    def click_add_photo_face(self):
+        photo_face = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]
+        self.photo_add.setText(''.join(photo_face))
+        self.photo_person.setPixmap(QPixmap(self.photo_add.text()).scaled(200, 250))
+
+    def click_save_add(self):
+        self.mass_add = [x.text() for x in self.mass_labels]
+
+        if self.check_data():
+            self.database.insert_person(self.mass_add)
+            self.close()
+            [x.clear() for x in self.mass_labels]
+            self.photo_person.clear()
+        else:
+            pass
 
     def mouse_pressed_date_of_birth(self, event):
         self.date_of_birth_add.setInputMask("00-00-0000")
@@ -175,19 +218,6 @@ class EditPersonWindow(QWidget):
 
     def mouse_pressed_series(self, event):
         self.series_and_number_add.setInputMask("0000 000000")
-
-    def click_add(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-
-    def click_save_add(self):
-        self.mass_add = [x.text() for x in self.mass_labels]
-
-        if self.check_data():
-            self.database.insert_person(self.mass_add)
-            self.close()
-            [x.clear() for x in self.mass_labels]
-        else:
-            pass
 
     def check_data(self):
         lineEdits = self.findChildren(QLineEdit)

@@ -8,7 +8,6 @@ from Windows import WindowsManager
 
 
 class MainWindow(QMainWindow):
-
     def __init__(self, database, windows_manager):
         super(MainWindow, self).__init__()
         self.windows_manager = windows_manager
@@ -21,9 +20,9 @@ class MainWindow(QMainWindow):
 
         self.screen_()
         self.buttons()
+        self.write_text_element()
         self.create_table()
         self.load_data()
-        self.write_text_element()
 
     def screen_(self):
         self.setWindowTitle("Scanner")
@@ -136,15 +135,13 @@ class MainWindow(QMainWindow):
         self.snils_bd.setGeometry(1070, 170, 250, 30)
         self.snils_bd.setFont(QFont("SansSerif", 15))
 
-        self.photo_bd = self.labels[11]
-        self.photo_bd.setGeometry(10, 10, 100, 20)
+        self.photo_bd_text = self.labels[11]
+        self.photo_bd_text.close()
+
+        self.photo_bd = QLabel(self)
+        self.photo_bd.setGeometry(50, 50, 200, 250)
 
         self.enabled_false()
-
-        '''self.pho = self.labels[11].text()
-        self.photo = QLabel(self)
-        self.photo.setPixmap(QPixmap(self.pho).scaled(150, 200))
-        self.photo.setGeometry(100, 100, 150, 200)'''
 
     def buttons(self):
 
@@ -170,6 +167,15 @@ class MainWindow(QMainWindow):
         self.button_load_records = QPushButton("Загрузить ещё", self)
         self.button_load_records.setGeometry(49, 360, 150, 30)
         self.button_load_records.clicked.connect(self.click_edit_records)
+
+        self.button_edit_photo = QPushButton("Изменить фото", self)
+        self.button_edit_photo.setGeometry(100, 310, 120, 30)
+        self.button_edit_photo.clicked.connect(self.click_button_edit_photo)
+
+    def click_button_edit_photo(self):
+        add_photo_for_edit = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]
+        self.photo_bd_text.setText(''.join(add_photo_for_edit))
+        self.photo_bd.setPixmap(QPixmap(self.photo_bd_text.text()).scaled(200, 250))
 
     def click_add(self):
         self.windows_manager.show_window(WindowsManager.WindowsNames.EditPersonWindow)
@@ -198,6 +204,7 @@ class MainWindow(QMainWindow):
         self.snils_bd.setEnabled(True)
         self.photo_bd.setEnabled(True)
         self.button_save.setEnabled(True)
+        self.button_edit_photo.setEnabled(True)
 
     def click_delete_person(self):
         self.msg_delete = QMessageBox()
@@ -235,7 +242,8 @@ class MainWindow(QMainWindow):
                 # parsing table
                 for i in range(12):
                     self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
-                # self.labels[11].установить_фото
+                self.photo = self.labels[11].text()
+                self.photo_bd.setPixmap(QPixmap(self.photo).scaled(200, 250))
 
                 if index.data():
                     self.button_edit.setEnabled(True)
@@ -286,5 +294,6 @@ class MainWindow(QMainWindow):
         self.series_and_number_bd.setEnabled(False)
         self.inn_bd.setEnabled(False)
         self.snils_bd.setEnabled(False)
-        self.photo_bd.setEnabled(False)
+        self.photo_bd.clear()
+        self.button_edit_photo.setEnabled(False)
 
