@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
 
         self.row_to_base_id = list()
         self.last_id_loaded = -1
-        self.limit = 3
+        self.limit = 10
         self.index_row = -1
 
         self.screen_()
@@ -31,116 +31,49 @@ class MainWindow(QMainWindow):
     def write_text_element(self):
 
         # displaying the text of the surname, name...
+        textData = (
+            ("Фамилия:", (350, 50, 200, 30)),
+            ("Имя:", (350, 90, 200, 30)),
+            ("Отчество:", (350, 130, 200, 30)),
+            ("Дата рождения:", (350, 170, 200, 30)),
+            ("Место рождения:", (350, 210, 200, 30)),
+            ("Место регистрации:", (300, 250, 250, 30)),
+            ("Кем выдан:", (350, 290, 200, 30)),
+            ("Дата выдачи:", (850, 50, 200, 30)),
+            ("Серия и номер:", (850, 90, 200, 30)),
+            ("ИНН:", (850, 130, 200, 30)),
+            ("СНИЛС:", (850, 170, 200, 30)),
+        )
 
-        text_surname = QLabel("Фамилия:", self)
-        text_surname.setGeometry(350, 50, 200, 30)
-        text_surname.setFont(QFont("SansSerif", 15))
-        text_surname.setAlignment(Qt.AlignRight)
-
-        text_name = QLabel("Имя:", self)
-        text_name.setGeometry(350, 90, 200, 30)
-        text_name.setFont(QFont("SansSerif", 15))
-        text_name.setAlignment(Qt.AlignRight)
-
-        text_patronymic = QLabel("Отчество:", self)
-        text_patronymic.setGeometry(350, 130, 200, 30)
-        text_patronymic.setFont(QFont("SansSerif", 15))
-        text_patronymic.setAlignment(Qt.AlignRight)
-
-        text_date_of_birth = QLabel("Дата рождения:", self)
-        text_date_of_birth.setGeometry(350, 170, 200, 30)
-        text_date_of_birth.setFont(QFont("SansSerif", 15))
-        text_date_of_birth.setAlignment(Qt.AlignRight)
-
-        text_place_of_birth = QLabel("Место рождения:", self)
-        text_place_of_birth.setGeometry(350, 210, 200, 30)
-        text_place_of_birth.setFont(QFont("SansSerif", 15))
-        text_place_of_birth.setAlignment(Qt.AlignRight)
-
-        text_place_of_registration = QLabel("Место регистрации:", self)
-        text_place_of_registration.setGeometry(300, 250, 250, 30)
-        text_place_of_registration.setFont(QFont("SansSerif", 15))
-        text_place_of_registration.setAlignment(Qt.AlignRight)
-
-        text_issued_by_whom = QLabel("Кем выдан:", self)
-        text_issued_by_whom.setGeometry(350, 290, 200, 30)
-        text_issued_by_whom.setFont(QFont("SansSerif", 15))
-        text_issued_by_whom.setAlignment(Qt.AlignRight)
-
-        text_date_of_issue = QLabel("Дата выдачи:", self)
-        text_date_of_issue.setGeometry(850, 50, 200, 30)
-        text_date_of_issue.setFont(QFont("SansSerif", 15))
-        text_date_of_issue.setAlignment(Qt.AlignRight)
-
-        text_series_and_number = QLabel("Серия и номер:", self)
-        text_series_and_number.setGeometry(850, 90, 200, 30)
-        text_series_and_number.setFont(QFont("SansSerif", 15))
-        text_series_and_number.setAlignment(Qt.AlignRight)
-
-        text_inn = QLabel("ИНН:", self)
-        text_inn.setGeometry(850, 130, 200, 30)
-        text_inn.setFont(QFont("SansSerif", 15))
-        text_inn.setAlignment(Qt.AlignRight)
-
-        text_snils = QLabel("СНИЛС:", self)
-        text_snils.setGeometry(850, 170, 200, 30)
-        text_snils.setFont(QFont("SansSerif", 15))
-        text_snils.setAlignment(Qt.AlignRight)
+        for text, geometry in textData:
+            label = QLabel(text, self)
+            label.setGeometry(*geometry)
+            label.setFont(QFont("SansSerif", 15))
+            label.setAlignment(Qt.AlignRight)
 
         # data in db
+        labelsGeometrys = (
+            (570, 50, 250, 30),
+            (570, 90, 250, 30),
+            (570, 130, 250, 30),
+            (570, 170, 250, 30),
+            (570, 210, 250, 30),
+            (570, 250, 250, 30),
+            (570, 290, 250, 30),
+            (1070, 50, 250, 30),
+            (1070, 90, 250, 30),
+            (1070, 130, 250, 30),
+            (1070, 170, 250, 30),
+        )
 
-        self.labels = [(QLineEdit("", self)) for x in range(12)]
-
-        self.surname_bd = self.labels[0]
-        self.surname_bd.setGeometry(570, 50, 250, 30)
-        self.surname_bd.setFont(QFont("SansSerif", 15))
-
-        self.name_bd = self.labels[1]
-        self.name_bd.setGeometry(570, 90, 250, 30)
-        self.name_bd.setFont(QFont("SansSerif", 15))
-
-        self.patronymic_bd = self.labels[2]
-        self.patronymic_bd.setGeometry(570, 130, 250, 30)
-        self.patronymic_bd.setFont(QFont("SansSerif", 15))
-
-        self.date_of_birth_bd = self.labels[3]
-        self.date_of_birth_bd.setGeometry(570, 170, 250, 30)
-        self.date_of_birth_bd.setFont(QFont("SansSerif", 15))
-
-        self.place_of_birth_bd = self.labels[4]
-        self.place_of_birth_bd.setGeometry(570, 210, 250, 30)
-        self.place_of_birth_bd.setFont(QFont("SansSerif", 15))
-
-        self.place_of_registration_bd = self.labels[5]
-        self.place_of_registration_bd.setGeometry(570, 250, 250, 30)
-        self.place_of_registration_bd.setFont(QFont("SansSerif", 15))
-
-        self.issued_by_whom_bd = self.labels[7]
-        self.issued_by_whom_bd.setGeometry(570, 290, 250, 30)
-        self.issued_by_whom_bd.setFont(QFont("SansSerif", 15))
-
-        self.date_of_issue_bd = self.labels[8]
-        self.date_of_issue_bd.setGeometry(1070, 50, 250, 30)
-        self.date_of_issue_bd.setFont(QFont("SansSerif", 15))
-
-        self.series_and_number_bd = self.labels[6]
-        self.series_and_number_bd.setGeometry(1070, 90, 250, 30)
-        self.series_and_number_bd.setFont(QFont("SansSerif", 15))
-
-        self.inn_bd = self.labels[9]
-        self.inn_bd.setGeometry(1070, 130, 250, 30)
-        self.inn_bd.setFont(QFont("SansSerif", 15))
-
-        self.snils_bd = self.labels[10]
-        self.snils_bd.setGeometry(1070, 170, 250, 30)
-        self.snils_bd.setFont(QFont("SansSerif", 15))
-
-        self.photo_bd_text = self.labels[11]
-        self.photo_bd_text.close()
+        self.labels = [QLineEdit("", self) for x in range(12)]
+        for i, label in enumerate(self.labels[:11]):
+            label.setGeometry(*labelsGeometrys[i])
+            label.setFont(QFont("SansSerif", 15))
+        self.labels[11].close()
 
         self.photo_bd = QLabel(self)
         self.photo_bd.setGeometry(50, 50, 200, 250)
-
         self.enabled_false()
 
     def buttons(self):
@@ -173,9 +106,15 @@ class MainWindow(QMainWindow):
         self.button_edit_photo.clicked.connect(self.click_button_edit_photo)
 
     def click_button_edit_photo(self):
-        add_photo_for_edit = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]
-        self.photo_bd_text.setText(''.join(add_photo_for_edit))
-        self.photo_bd.setPixmap(QPixmap(self.photo_bd_text.text()).scaled(200, 250))
+        add_photo_for_edit = QFileDialog.getOpenFileNames(
+            self,
+            'Open File',
+            'Users/',
+            'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)'
+        )[0]
+        photo_path = ''.join(add_photo_for_edit)
+        self.labels[11].setText(''.join(add_photo_for_edit))
+        self.photo_bd.setPixmap(QPixmap(photo_path).scaled(200, 250))
 
     def click_add(self):
         self.windows_manager.show_window(WindowsManager.WindowsNames.EditPersonWindow)
@@ -191,18 +130,9 @@ class MainWindow(QMainWindow):
         self.enabled_false()
 
     def click_edit(self):
-        self.surname_bd.setEnabled(True)
-        self.name_bd.setEnabled(True)
-        self.patronymic_bd.setEnabled(True)
-        self.date_of_birth_bd.setEnabled(True)
-        self.place_of_birth_bd.setEnabled(True)
-        self.place_of_registration_bd.setEnabled(True)
-        self.issued_by_whom_bd.setEnabled(True)
-        self.date_of_issue_bd.setEnabled(True)
-        self.series_and_number_bd.setEnabled(True)
-        self.inn_bd.setEnabled(True)
-        self.snils_bd.setEnabled(True)
-        self.photo_bd.setEnabled(True)
+        for label in self.labels[:11]:
+            label.setEnabled(True)
+
         self.button_save.setEnabled(True)
         self.button_edit_photo.setEnabled(True)
 
@@ -256,6 +186,7 @@ class MainWindow(QMainWindow):
 
     def create_table(self):
         self.tableWidget = QTableWidget(self)
+        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWidget.setRowCount(5)
         self.tableWidget.setColumnCount(12)
         self.tableWidget.setGeometry(50, 400, 1300, 350)
@@ -266,9 +197,13 @@ class MainWindow(QMainWindow):
 
         self.tableWidget.viewport().installEventFilter(self)
 
-        self.headerLabels = (["Фамилия", "Имя", "Отчество", "Дата Рождения", "Место Рождения", "Место регистрации", "Серия и Номер", "Кем выдан", "Дата выдачи", "ИНН", "СНИЛС", "ФОТО"])
-        for i in range(len(self.headerLabels)):
-            self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(self.headerLabels[i]))
+        headers = (
+            "Фамилия", "Имя", "Отчество", "Дата Рождения",
+            "Место Рождения", "Место регистрации", "Серия и Номер",
+            "Кем выдан", "Дата выдачи", "ИНН", "СНИЛС", "ФОТО"
+        )
+        for i, header in enumerate(headers):
+            self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(header))
 
     def load_data(self):
         result = self.database.get_persons(self.last_id_loaded, self.limit)
@@ -280,20 +215,15 @@ class MainWindow(QMainWindow):
             self.row_to_base_id.append(row_data[0])
             self.last_id_loaded = row_data[0]
             for column_number, data in enumerate(row_data[1:]):
-                self.tableWidget.setItem(self.tableWidget.rowCount() - 1, column_number, QTableWidgetItem(str(data)))
+                self.tableWidget.setItem(
+                    self.tableWidget.rowCount() - 1,
+                    column_number,
+                    QTableWidgetItem(str(data))
+                )
 
     def enabled_false(self):
-        self.surname_bd.setEnabled(False)
-        self.name_bd.setEnabled(False)
-        self.patronymic_bd.setEnabled(False)
-        self.date_of_birth_bd.setEnabled(False)
-        self.place_of_birth_bd.setEnabled(False)
-        self.place_of_registration_bd.setEnabled(False)
-        self.issued_by_whom_bd.setEnabled(False)
-        self.date_of_issue_bd.setEnabled(False)
-        self.series_and_number_bd.setEnabled(False)
-        self.inn_bd.setEnabled(False)
-        self.snils_bd.setEnabled(False)
+        for label in self.labels[:11]:
+            label.setEnabled(False)
         self.photo_bd.clear()
         self.button_edit_photo.setEnabled(False)
 

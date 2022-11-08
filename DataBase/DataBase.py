@@ -9,25 +9,47 @@ class DataBaseCluster:
         self.init_table()
 
     def init_table(self):
-        self.request.execute("""CREATE TABLE IF NOT EXISTS persons(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            surname TEXT NOT NULL,
-            name_ TEXT,
-            patronymic TEXT,
-            date_of_birth TEXT,
-            place_of_birth TEXT,
-            place_of_registration TEXT,
-            series_and_number TEXT,
-            issued_by_whom TEXT,
-            date_of_issue TEXT,
-            inn INTEGER,
-            snils TEXT, 
-            photo TEXT);""")
+        self.request.execute(
+            """
+            CREATE TABLE IF NOT EXISTS persons(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                surname TEXT NOT NULL,
+                name_ TEXT,
+                patronymic TEXT,
+                date_of_birth TEXT,
+                place_of_birth TEXT,
+                place_of_registration TEXT,
+                series_and_number TEXT,
+                issued_by_whom TEXT,
+                date_of_issue TEXT,
+                inn INTEGER,
+                snils TEXT, 
+                photo TEXT
+            );
+            """
+        )
         self.database.commit()
 
     def insert_person(self, person_data):
-        self.request.execute("""INSERT INTO persons(surname, name_, patronymic, date_of_birth, place_of_birth, place_of_registration, series_and_number, issued_by_whom, date_of_issue, inn, snils, photo) 
-                                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);""", person_data)
+        self.request.execute(
+            """
+                INSERT INTO persons(
+                    surname, 
+                    name_, 
+                    patronymic, 
+                    date_of_birth, 
+                    place_of_birth, 
+                    place_of_registration, 
+                    series_and_number, 
+                    issued_by_whom, 
+                    date_of_issue, 
+                    inn, 
+                    snils, 
+                    photo
+                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """,
+            person_data,
+        )
         self.database.commit()
 
     def get_persons(self, id, limit):
@@ -38,8 +60,26 @@ class DataBaseCluster:
         self.database.commit()
 
     def update_person(self, mass, id):
-        self.request.execute("""UPDATE persons SET surname = ?, name_ = ?, patronymic = ?, date_of_birth = ?, place_of_birth = ?, place_of_registration = ?, series_and_number = ?, issued_by_whom = ?, date_of_issue = ?, inn = ?, snils = ?, photo = ?
-                                 WHERE id = ?""", mass + [id])
+        self.request.execute(
+            """
+                UPDATE persons 
+                    SET 
+                        surname = ?, 
+                        name_ = ?, 
+                        patronymic = ?, 
+                        date_of_birth = ?, 
+                        place_of_birth = ?, 
+                        place_of_registration = ?, 
+                        series_and_number = ?, 
+                        issued_by_whom = ?, 
+                        date_of_issue = ?, 
+                        inn = ?,
+                        snils = ?, 
+                        photo = ?
+                    WHERE id = ?
+            """,
+            mass + [id],
+        )
         self.database.commit()
 
 
