@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 
 from Windows import WindowsManager
+from tools import file_manager
 
 
 class MainWindow(QMainWindow):
@@ -170,10 +171,15 @@ class MainWindow(QMainWindow):
                 if self.index_row < 0:
                     return super(MainWindow, self).eventFilter(source, event)
                 # parsing table
-                for i in range(12):
+                for i in range(11):
                     self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
-                self.photo = self.labels[11].text()
-                self.photo_bd.setPixmap(QPixmap(self.photo).scaled(200, 250))
+                self.photo_bd.setPixmap(
+                    QPixmap(
+                        file_manager.get_file_path(
+                            self.row_to_base_id[self.index_row],
+                            "photo.jpg",
+                        ),
+                    ).scaled(200, 250))
 
                 if index.data():
                     self.button_edit.setEnabled(True)
@@ -188,7 +194,7 @@ class MainWindow(QMainWindow):
         self.tableWidget = QTableWidget(self)
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWidget.setRowCount(5)
-        self.tableWidget.setColumnCount(12)
+        self.tableWidget.setColumnCount(11)
         self.tableWidget.setGeometry(50, 400, 1300, 350)
         self.tableWidget.setFixedSize(1300, 350)
         
@@ -200,7 +206,7 @@ class MainWindow(QMainWindow):
         headers = (
             "Фамилия", "Имя", "Отчество", "Дата Рождения",
             "Место Рождения", "Место регистрации", "Серия и Номер",
-            "Кем выдан", "Дата выдачи", "ИНН", "СНИЛС", "ФОТО"
+            "Кем выдан", "Дата выдачи", "ИНН", "СНИЛС"
         )
         for i, header in enumerate(headers):
             self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(header))
@@ -213,8 +219,8 @@ class MainWindow(QMainWindow):
         for row_number, row_data in enumerate(result):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             self.row_to_base_id.append(row_data[0])
-            self.last_time_loaded = row_data[13]
-            for column_number, data in enumerate(row_data[1:13]):
+            self.last_time_loaded = row_data[12]
+            for column_number, data in enumerate(row_data[1:12]):
                 self.tableWidget.setItem(
                     self.tableWidget.rowCount() - 1,
                     column_number,

@@ -23,8 +23,7 @@ class DataBaseCluster:
                 issued_by_whom TEXT,
                 date_of_issue TEXT,
                 inn INTEGER,
-                snils TEXT, 
-                photo TEXT,
+                snils TEXT,
                 updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
             """
@@ -33,6 +32,7 @@ class DataBaseCluster:
 
     def insert_person(self, person_data):
         id = str(uuid.uuid4())
+
         self.request.execute(
             """
                 INSERT INTO persons(
@@ -47,9 +47,8 @@ class DataBaseCluster:
                     issued_by_whom, 
                     date_of_issue, 
                     inn, 
-                    snils, 
-                    photo
-                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                    snils
+                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
             [id] + person_data,
         )
@@ -89,7 +88,6 @@ class DataBaseCluster:
                         date_of_issue = ?, 
                         inn = ?,
                         snils = ?,
-                        photo = ?,
                         updated = CURRENT_TIMESTAMP
                     WHERE id = ?
             """,

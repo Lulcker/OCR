@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
 
 from Windows import WindowsManager
-
+from tools import file_manager
 
 class EditPersonWindow(QWidget):
     def __init__(self, database, windows_manager):
@@ -196,14 +196,13 @@ class EditPersonWindow(QWidget):
     def click_save_add(self):
         person_data = [x.text() for x in self.mass_labels]
         if self.check_data():
-            person_id = self.database.insert_person(person_data)
+            person_id = self.database.insert_person(person_data[:-1])
+            file_manager.save_file(person_data[11], person_id, "photo.jpg")
             [x.clear() for x in self.mass_labels]
             self.photo_person.clear()
             person_data.insert(0, person_id)
-            self.windows_manager.get_window(WindowsManager.WindowsNames.MainWindow).add_new_person(person_data)
+            self.windows_manager.get_window(WindowsManager.WindowsNames.MainWindow).add_new_person(person_data[:-1])
             self.close()
-        else:
-            pass
 
     def mouse_pressed_date_of_birth(self, event):
         self.date_of_birth_add.setInputMask("00-00-0000")
