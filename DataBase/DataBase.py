@@ -1,5 +1,5 @@
 import sqlite3
-
+import uuid
 
 class DataBaseCluster:
 
@@ -12,7 +12,7 @@ class DataBaseCluster:
         self.request.execute(
             """
             CREATE TABLE IF NOT EXISTS persons(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id TEXT PRIMARY KEY,
                 surname TEXT NOT NULL,
                 name_ TEXT,
                 patronymic TEXT,
@@ -24,16 +24,19 @@ class DataBaseCluster:
                 date_of_issue TEXT,
                 inn INTEGER,
                 snils TEXT, 
-                photo TEXT
+                photo TEXT,
+                updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
             """
         )
         self.database.commit()
 
     def insert_person(self, person_data):
+        id = str(uuid.uuid4())
         self.request.execute(
             """
                 INSERT INTO persons(
+                    id,
                     surname, 
                     name_, 
                     patronymic, 
@@ -46,17 +49,28 @@ class DataBaseCluster:
                     inn, 
                     snils, 
                     photo
-                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """,
-            person_data,
+            [id] + person_data,
         )
         self.database.commit()
+        return id
 
-    def get_persons(self, id, limit):
-        return self.request.execute("SELECT * FROM persons WHERE id > ? LIMIT ?;", [id, limit])
+    def get_persons(self, time, limit):
+        return self.request.execute(
+            """
+                SELECT 
+                    * 
+                FROM persons 
+                WHERE updated < ?
+                ORDER BY updated DESC
+                LIMIT ?;
+            """,
+            [time, limit]
+        )
 
     def delete_person(self, id):
-        self.request.execute("""DELETE FROM persons WHERE id ==?;""", [id])
+        self.request.execute("""DELETE FROM persons WHERE id == ?;""", [id])
         self.database.commit()
 
     def update_person(self, mass, id):
@@ -74,8 +88,9 @@ class DataBaseCluster:
                         issued_by_whom = ?, 
                         date_of_issue = ?, 
                         inn = ?,
-                        snils = ?, 
-                        photo = ?
+                        snils = ?,
+                        photo = ?,
+                        updated = CURRENT_TIMESTAMP
                     WHERE id = ?
             """,
             mass + [id],

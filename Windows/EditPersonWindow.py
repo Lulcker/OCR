@@ -194,13 +194,14 @@ class EditPersonWindow(QWidget):
         self.photo_person.setPixmap(QPixmap(self.photo_add.text()).scaled(200, 250))
 
     def click_save_add(self):
-        self.mass_add = [x.text() for x in self.mass_labels]
-
+        person_data = [x.text() for x in self.mass_labels]
         if self.check_data():
-            self.database.insert_person(self.mass_add)
-            self.close()
+            person_id = self.database.insert_person(person_data)
             [x.clear() for x in self.mass_labels]
             self.photo_person.clear()
+            person_data.insert(0, person_id)
+            self.windows_manager.get_window(WindowsManager.WindowsNames.MainWindow).add_new_person(person_data)
+            self.close()
         else:
             pass
 

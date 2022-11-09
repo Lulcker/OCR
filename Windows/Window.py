@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         self.database = database
 
         self.row_to_base_id = list()
-        self.last_id_loaded = -1
+        self.last_time_loaded = '2999-01-01 00:00:00'
         self.limit = 10
         self.index_row = -1
 
@@ -206,20 +206,27 @@ class MainWindow(QMainWindow):
             self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(header))
 
     def load_data(self):
-        result = self.database.get_persons(self.last_id_loaded, self.limit)
-        if self.last_id_loaded < 0:
+        result = self.database.get_persons(self.last_time_loaded, self.limit)
+        if self.last_time_loaded == '2999-01-01 00:00:00':
             self.tableWidget.setRowCount(0)
             self.row_to_base_id = []
         for row_number, row_data in enumerate(result):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             self.row_to_base_id.append(row_data[0])
-            self.last_id_loaded = row_data[0]
-            for column_number, data in enumerate(row_data[1:]):
+            self.last_time_loaded = row_data[13]
+            for column_number, data in enumerate(row_data[1:13]):
                 self.tableWidget.setItem(
                     self.tableWidget.rowCount() - 1,
                     column_number,
                     QTableWidgetItem(str(data))
                 )
+
+    def add_new_person(self, person_data):
+        self.tableWidget.insertRow(0)
+        self.row_to_base_id.insert(0, person_data[0])
+        for column_number, data in enumerate(person_data[1:]):
+            self.tableWidget.setItem(0, column_number, QTableWidgetItem(str(data)))
+
 
     def enabled_false(self):
         for label in self.labels[:11]:

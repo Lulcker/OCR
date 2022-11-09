@@ -15,5 +15,8 @@ class WindowsManager:
     def show_window(self, window_name):
         self.windows[window_name].show()
 
+    def get_window(self, window_name):
+        return self.windows[window_name]
+
     def close_window(self, window_name):
         self.windows[window_name].close()
