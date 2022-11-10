@@ -199,8 +199,7 @@ class MainWindow(QMainWindow):
         self.tableWidget.setFixedSize(1300, 350)
         
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableWidget.viewport().installEventFilter(self)
 
         headers = (
@@ -210,6 +209,7 @@ class MainWindow(QMainWindow):
         )
         for i, header in enumerate(headers):
             self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(header))
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def load_data(self):
         result = self.database.get_persons(self.last_time_loaded, self.limit)
@@ -232,7 +232,6 @@ class MainWindow(QMainWindow):
         self.row_to_base_id.insert(0, person_data[0])
         for column_number, data in enumerate(person_data[1:]):
             self.tableWidget.setItem(0, column_number, QTableWidgetItem(str(data)))
-
 
     def enabled_false(self):
         for label in self.labels[:11]:

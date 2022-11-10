@@ -78,34 +78,41 @@ class EditPersonWindow(QWidget):
         text_snils_add.setAlignment(Qt.AlignRight)
 
         # для ограничения ввода цифр в поля с букавками!
-        input_restriction = QRegExpValidator(self)
-        reg = QRegExp("[а-яА-Я]{25}")
-        input_restriction.setRegExp(reg)
-
+        input_restriction = QRegExpValidator(QRegExp("[а-яА-Я]{3,}"))
+        date_restriction = QRegExpValidator(QRegExp("^(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[012])\-\d{4}$"))
+        passport_restriction = QRegExpValidator(QRegExp("^[0-9]{4}\ [0-9]{6}$"))
+        inn_restriction = QRegExpValidator(QRegExp("^[0-9]{12}$"))
+        snils_restriction = QRegExpValidator(QRegExp("^[0-9]{3}\-[0-9]{3}\-[0-9]{3}\ [0-9]{2}$"))
         self.mass_labels = [(QLineEdit("", self)) for x in range(12)]
 
         self.surname_add = self.mass_labels[0]
         self.surname_add.setGeometry(520, 50, 200, 30)
         self.surname_add.setPlaceholderText("Введите фамилию")
         self.surname_add.setValidator(input_restriction)
+        self.surname_add.editingFinished.connect(lambda: self.surname_add.setText(self.surname_add.text().title()))
         self.surname_add.setObjectName("фамилия")
 
         self.name_add = self.mass_labels[1]
         self.name_add.setGeometry(520, 90, 200, 30)
         self.name_add.setPlaceholderText("Введите имя")
         self.name_add.setValidator(input_restriction)
+        self.name_add.editingFinished.connect(lambda: self.name_add.setText(self.name_add.text().title()))
         self.name_add.setObjectName("имя")
 
         self.patronymic_add = self.mass_labels[2]
         self.patronymic_add.setGeometry(520, 130, 200, 30)
         self.patronymic_add.setPlaceholderText("Введите отчество")
         self.patronymic_add.setValidator(input_restriction)
+        self.patronymic_add.editingFinished.connect(
+            lambda: self.patronymic_add.setText(self.patronymic_add.text().title())
+        )
         self.patronymic_add.setObjectName("отчество")
 
         self.date_of_birth_add = self.mass_labels[3]
         self.date_of_birth_add.setGeometry(520, 170, 200, 30)
         self.date_of_birth_add.setPlaceholderText("Введите дату рождения")
-        self.date_of_birth_add.mousePressEvent = self.mouse_pressed_date_of_birth
+        self.date_of_birth_add.setValidator(date_restriction)
+        self.date_of_birth_add.mousePressEvent = lambda x: self.date_of_birth_add.setInputMask("00-00-0000")
         self.date_of_birth_add.setObjectName("дата рождения")
 
         self.place_of_birth_add = self.mass_labels[4]
@@ -126,25 +133,29 @@ class EditPersonWindow(QWidget):
         self.date_of_issue_add = self.mass_labels[8]
         self.date_of_issue_add.setGeometry(970, 50, 200, 30)
         self.date_of_issue_add.setPlaceholderText("Введите когда выдан")
-        self.date_of_issue_add.mousePressEvent = self.mouse_pressed_date_of_issue
+        self.date_of_issue_add.setValidator(date_restriction)
+        self.date_of_issue_add.mousePressEvent = lambda x: self.date_of_issue_add.setInputMask("00-00-0000")
         self.date_of_issue_add.setObjectName("когда выдан")
 
         self.series_and_number_add = self.mass_labels[6]
         self.series_and_number_add.setGeometry(970, 90, 200, 30)
         self.series_and_number_add.setPlaceholderText("Введите серию и номер паспорта")
-        self.series_and_number_add.mousePressEvent = self.mouse_pressed_series
+        self.series_and_number_add.mousePressEvent = lambda x: self.series_and_number_add.setInputMask("0000 000000")
+        self.series_and_number_add.setValidator(passport_restriction)
         self.series_and_number_add.setObjectName("серия и номер паспорта")
 
         self.inn_add = self.mass_labels[9]
         self.inn_add.setGeometry(970, 130, 200, 30)
         self.inn_add.setPlaceholderText("Введите ИНН")
-        self.inn_add.mousePressEvent = self.mouse_pressed_inn
+        self.inn_add.mousePressEvent = lambda x: self.inn_add.setInputMask("000000000000")
+        self.inn_add.setValidator(inn_restriction)
         self.inn_add.setObjectName("ИНН")
 
         self.snils_add = self.mass_labels[10]
         self.snils_add.setGeometry(970, 170, 200, 30)
         self.snils_add.setPlaceholderText("Введите СНИЛС")
-        self.snils_add.mousePressEvent = self.mouse_pressed_snils
+        self.snils_add.mousePressEvent = lambda x: self.snils_add.setInputMask("000-000-000 00")
+        self.snils_add.setValidator(snils_restriction)
         self.snils_add.setObjectName("СНИЛС")
 
         self.photo_add = self.mass_labels[11]
@@ -204,27 +215,11 @@ class EditPersonWindow(QWidget):
             self.windows_manager.get_window(WindowsManager.WindowsNames.MainWindow).add_new_person(person_data[:-1])
             self.close()
 
-    def mouse_pressed_date_of_birth(self, event):
-        self.date_of_birth_add.setInputMask("00-00-0000")
-
-    def mouse_pressed_date_of_issue(self, event):
-        self.date_of_issue_add.setInputMask("00-00-0000")
-
-    def mouse_pressed_snils(self, event):
-        self.snils_add.setInputMask("000-000-000 00")
-
-    def mouse_pressed_inn(self, event):
-        self.inn_add.setInputMask("000000000000")
-
-    def mouse_pressed_series(self, event):
-        self.series_and_number_add.setInputMask("0000 000000")
-
     def check_data(self):
         lineEdits = self.findChildren(QLineEdit)
         text = ''
-
         for line_error in lineEdits:
-            if not line_error.text():
+            if (not line_error.text()) or not line_error.hasAcceptableInput():
                 text = f'{text}Заполните поле {line_error.objectName()}\n'
 
         if text:
