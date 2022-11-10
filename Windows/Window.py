@@ -68,11 +68,39 @@ class MainWindow(QMainWindow):
             (1070, 170, 250, 30),
         )
 
+        input_restriction = QRegExpValidator(QRegExp("[а-яА-Я]{3,}")) # surname, name, fam,
+        date_restriction = QRegExpValidator(QRegExp("^(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[012])\-\d{4}$")) # data_r, date_is
+        passport_restriction = QRegExpValidator(QRegExp("^[0-9]{4}\ [0-9]{6}$"))
+        inn_restriction = QRegExpValidator(QRegExp("^[0-9]{12}$"))
+        snils_restriction = QRegExpValidator(QRegExp("^[0-9]{3}\-[0-9]{3}\-[0-9]{3}\ [0-9]{2}$"))
+
         self.labels = [QLineEdit("", self) for x in range(12)]
         for i, label in enumerate(self.labels[:11]):
             label.setGeometry(*labelsGeometrys[i])
             label.setFont(QFont("SansSerif", 15))
         self.labels[11].close()
+
+        self.labels[0].setValidator(input_restriction)
+        self.labels[0].editingFinished.connect(lambda: self.labels[0].setText(self.labels[0].text().title()))
+        self.labels[1].setValidator(input_restriction)
+        self.labels[1].editingFinished.connect(lambda: self.labels[1].setText(self.labels[1].text().title()))
+        self.labels[2].setValidator(input_restriction)
+        self.labels[2].editingFinished.connect(lambda: self.labels[2].setText(self.labels[2].text().title()))
+
+        self.labels[3].setValidator(date_restriction)
+        self.labels[3].mousePressEvent = lambda x: self.labels[3].setInputMask("00-00-0000")
+
+        self.labels[6].setValidator(passport_restriction)
+        self.labels[6].mousePressEvent = lambda x: self.labels[6].setInputMask("0000 000000")
+
+        self.labels[8].setValidator(date_restriction)
+        self.labels[8].mousePressEvent = lambda x: self.labels[8].setInputMask("00-00-0000")
+
+        self.labels[9].setValidator(inn_restriction)
+        self.labels[9].mousePressEvent = lambda x: self.labels[9].setInputMask("000000000000")
+
+        self.labels[10].setValidator(snils_restriction)
+        self.labels[10].mousePressEvent = lambda x: self.labels[10].setInputMask("000-000-000 00")
 
         self.photo_bd = QLabel(self)
         self.photo_bd.setGeometry(50, 50, 200, 250)
@@ -220,6 +248,15 @@ class MainWindow(QMainWindow):
         for i, header in enumerate(headers):
             self.tableWidget.setHorizontalHeaderItem(i, QTableWidgetItem(header))
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        column = (
+            (0, 100),
+            (1, 100),
+            (2, 120),
+            (9, 120),
+            (10, 120)
+        )
+        for i, col in column:
+            self.tableWidget.setColumnWidth(i, col)
 
     def load_data(self):
         result = self.database.get_persons(self.last_time_loaded, self.limit)

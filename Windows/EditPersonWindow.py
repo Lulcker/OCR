@@ -103,9 +103,7 @@ class EditPersonWindow(QWidget):
         self.patronymic_add.setGeometry(520, 130, 200, 30)
         self.patronymic_add.setPlaceholderText("Введите отчество")
         self.patronymic_add.setValidator(input_restriction)
-        self.patronymic_add.editingFinished.connect(
-            lambda: self.patronymic_add.setText(self.patronymic_add.text().title())
-        )
+        self.patronymic_add.editingFinished.connect(lambda: self.patronymic_add.setText(self.patronymic_add.text().title()))
         self.patronymic_add.setObjectName("отчество")
 
         self.date_of_birth_add = self.mass_labels[3]
@@ -227,15 +225,5 @@ class EditPersonWindow(QWidget):
         else:
             return True
 
-    '''@staticmethod
-    def bad_input():
-        msg_badinput = QMessageBox()
-        msg_badinput.setWindowTitle("Ошибка")
-        msg_badinput.setIcon(QMessageBox.Warning)
-        msg_badinput.setText("Неправильный ввод! Исправьте данные")
-        msg_badinput.setStandardButtons(QMessageBox.Ok)
-        res = msg_badinput.exec_()
-        if res == QMessageBox.Ok:
-            pass'''
 
 
