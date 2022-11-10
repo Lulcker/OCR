@@ -153,7 +153,9 @@ class MainWindow(QMainWindow):
 
         if res == QMessageBox.Yes:
             self.database.delete_person(self.row_to_base_id[self.index_row])
+            file_manager.delete_person_data(self.row_to_base_id[self.index_row])
             self.tableWidget.removeRow(self.index_row)
+            self.index_row = -1
             for i in range(self.index_row, len(self.row_to_base_id) - 1):
                 self.row_to_base_id[i] = self.row_to_base_id[i + 1]
             self.row_to_base_id.pop()

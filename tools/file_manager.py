@@ -13,3 +13,7 @@ def save_file(global_file_path, person_id, file_name):
 
 def get_file_path(person_id, file_name):
     return os.path.join(os.getcwd(), "persons_data", person_id, file_name)
+
+
+def delete_person_data(person_id):
+    shutil.rmtree(os.path.join(os.getcwd(), "persons_data", person_id))
