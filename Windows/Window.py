@@ -127,6 +127,7 @@ class MainWindow(QMainWindow):
         if self.index_row != 0:
             self.tableWidget.removeRow(self.index_row)
             self.tableWidget.insertRow(0)
+        self.row_to_base_id.insert(0, self.row_to_base_id.pop(self.index_row))
         for i in range(11):
             self.tableWidget.setItem(0, i, QTableWidgetItem(self.labels[i].text()))
         self.index_row = -1
@@ -175,9 +176,9 @@ class MainWindow(QMainWindow):
         if event.type() == QtCore.QEvent.MouseButtonPress:
             if event.button() == QtCore.Qt.LeftButton:
                 index = self.tableWidget.indexAt(event.pos())
-                self.index_row = index.row()
-                if self.index_row < 0:
+                if index.row() < 0:
                     return super(MainWindow, self).eventFilter(source, event)
+                self.index_row = index.row()
                 self.new_photo_path = ''
                 # parsing table
                 for i in range(11):
