@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
         self.write_text_element()
         self.create_table()
         self.load_data()
+        self.new_photo_path = ''
 
     def screen_(self):
         self.setWindowTitle("Scanner")
@@ -113,17 +114,22 @@ class MainWindow(QMainWindow):
             'Users/',
             'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)'
         )[0]
-        photo_path = ''.join(add_photo_for_edit)
-        self.labels[11].setText(''.join(add_photo_for_edit))
-        self.photo_bd.setPixmap(QPixmap(photo_path).scaled(200, 250))
+        self.new_photo_path = ''.join(add_photo_for_edit)
+        self.photo_bd.setPixmap(QPixmap(self.new_photo_path).scaled(200, 250))
 
     def click_add(self):
         self.windows_manager.show_window(WindowsManager.WindowsNames.EditPersonWindow)
 
     def click_save(self):
-        self.database.update_person([x.text() for x in self.labels], self.row_to_base_id[self.index_row])
-        for i in range(12):
-            self.tableWidget.item(self.index_row, i).setText(self.labels[i].text())
+        if self.new_photo_path:
+            file_manager.save_file(self.new_photo_path, self.row_to_base_id[self.index_row], "photo.jpg")
+        self.database.update_person([x.text() for x in self.labels[:-1]], self.row_to_base_id[self.index_row])
+        if self.index_row != 0:
+            self.tableWidget.removeRow(self.index_row)
+            self.tableWidget.insertRow(0)
+        for i in range(11):
+            self.tableWidget.setItem(0, i, QTableWidgetItem(self.labels[i].text()))
+        self.index_row = -1
         self.button_save.setEnabled(False)
         self.button_delete.setEnabled(False)
         self.button_edit.setEnabled(False)
@@ -170,6 +176,7 @@ class MainWindow(QMainWindow):
                 self.index_row = index.row()
                 if self.index_row < 0:
                     return super(MainWindow, self).eventFilter(source, event)
+                self.new_photo_path = ''
                 # parsing table
                 for i in range(11):
                     self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
