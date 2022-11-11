@@ -40,9 +40,9 @@ class MainWindow(QMainWindow):
             ("Дата рождения:", (350, 170, 200, 30)),
             ("Место рождения:", (350, 210, 200, 30)),
             ("Место регистрации:", (300, 250, 250, 30)),
-            ("Кем выдан:", (350, 290, 200, 30)),
-            ("Дата выдачи:", (850, 50, 200, 30)),
-            ("Серия и номер:", (850, 90, 200, 30)),
+            ("Серия и номер:", (350, 290, 200, 30)),
+            ("Кем выдан:", (850, 50, 200, 30)),
+            ("Дата выдачи:", (850, 90, 200, 30)),
             ("ИНН:", (850, 130, 200, 30)),
             ("СНИЛС:", (850, 170, 200, 30)),
         )
@@ -162,6 +162,13 @@ class MainWindow(QMainWindow):
         self.button_save.setEnabled(False)
         self.button_delete.setEnabled(False)
         self.button_edit.setEnabled(False)
+
+        self.labels[3].setInputMask("")
+        self.labels[6].setInputMask("")
+        self.labels[8].setInputMask("")
+        self.labels[9].setInputMask("")
+        self.labels[10].setInputMask("")
+
         [x.clear() for x in self.labels]
         self.enabled_false()
 
