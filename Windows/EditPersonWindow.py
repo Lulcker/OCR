@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
-import Processing
+from Processing import Processing
 
 from Windows import WindowsManager
 from tools import file_manager
@@ -90,7 +90,7 @@ class EditPersonWindow(QWidget):
         self.surname_add.setPlaceholderText("Введите фамилию")
         self.surname_add.setValidator(input_restriction)
         self.surname_add.editingFinished.connect(lambda: self.surname_add.setText(self.surname_add.text().title()))
-        self.surname_add.setText(Processing.Processing.return_surname())
+        # self.surname_add.setText(self.proc.Surname)
         self.surname_add.setObjectName("фамилия")
 
         self.name_add = self.mass_labels[1]
@@ -98,7 +98,6 @@ class EditPersonWindow(QWidget):
         self.name_add.setPlaceholderText("Введите имя")
         self.name_add.setValidator(input_restriction)
         self.name_add.editingFinished.connect(lambda: self.name_add.setText(self.name_add.text().title()))
-        self.surname_add.setText(Processing.Processing.return_name())
         self.name_add.setObjectName("имя")
 
         self.patronymic_add = self.mass_labels[2]
@@ -188,8 +187,10 @@ class EditPersonWindow(QWidget):
         self.button_add_image_person.clicked.connect(self.click_add_photo_face)
 
     def click_add_img_passport(self):
-        self.add_img = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'PDF File(*.pdf)')
-        return self.add_img
+        add_img = QFileDialog.getOpenFileName(self, 'Open File', 'Users/', 'PDF File(*.pdf)')[0]
+        proc = Processing.Processing(str(add_img))
+        self.surname_add.setText(proc.Surname)
+
         # потом переделать, когда Ванина часть будет готова
 
     def click_add_img_inn(self):
