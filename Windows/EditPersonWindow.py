@@ -170,13 +170,13 @@ class EditPersonWindow(QWidget):
         self.button_add_image_passport.setGeometry(780, 210, 170, 45)
         self.button_add_image_passport.clicked.connect(self.click_add_img_passport)
 
-        self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
-        self.button_add_image_inn.setGeometry(780, 265, 170, 45)
-        self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
+        # self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
+        # self.button_add_image_inn.setGeometry(780, 265, 170, 45)
+        # self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
 
-        self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
-        self.button_add_image_snils.setGeometry(780, 320, 170, 45)
-        self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
+        # self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
+        # self.button_add_image_snils.setGeometry(780, 320, 170, 45)
+        # self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
 
         self.button_save_add = QPushButton("Сохранить", self)
         self.button_save_add.setGeometry(1000, 210, 150, 30)
@@ -190,16 +190,21 @@ class EditPersonWindow(QWidget):
         add_img = QFileDialog.getOpenFileName(self, 'Open File', 'Users/', 'PDF File(*.pdf)')[0]
         proc = Processing.Processing(str(add_img))
         self.surname_add.setText(proc.Surname)
+        self.name_add.setText(proc.Name)
+        self.patronymic_add.setText(proc.Patronymic)
+        self.date_of_birth_add.setText(proc.Date_of_birth)
+        self.place_of_birth_add.setText(proc.Place_of_birth)
+        self.issued_by_whom_add.setText(proc.Issued_by_whom)
+        # добавить остальные поля
 
-        # потом переделать, когда Ванина часть будет готова
 
-    def click_add_img_inn(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-        # потом переделать, когда Ванина часть будет готова
+    # def click_add_img_inn(self):
+    #     QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+    #     # потом переделать, когда Ванина часть будет готова
 
-    def click_add_img_snils(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-        # потом переделать, когда Ванина часть будет готова
+    # def click_add_img_snils(self):
+    #     QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+    #     # потом переделать, когда Ванина часть будет готова
 
     def click_add_photo_face(self):
         photo_face = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]

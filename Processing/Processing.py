@@ -15,7 +15,7 @@ class Processing():
         date = self.ocr_core(filename)
         self.Name = date[9]
         self.Surname = date[7]
-        self.Patronomic = date[11]
+        self.Patronymic = date[11]
         self.Date_of_birth = date[12]
         self.Issued_by_whom = date[2] + date[3]
         self.Place_of_birth = date[14]
