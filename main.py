@@ -2,7 +2,6 @@ import sys
 from Windows import Window, EditPersonWindow, WindowsManager
 from DataBase import DataBase
 from PyQt5.QtWidgets import *
-from Processing import Processing
 
 
 def main():
@@ -10,7 +9,6 @@ def main():
 
     data = DataBase.DataBaseCluster('SQLite/SQLiteBase.db')
     windows_manager = WindowsManager.WindowsManager()
-
     new_person_window = EditPersonWindow.EditPersonWindow(data, windows_manager)
     main_window = Window.MainWindow(data, windows_manager)
     windows = {

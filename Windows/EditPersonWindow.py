@@ -3,10 +3,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
-from Processing import Processing
 
+from Processing import Processing
 from Windows import WindowsManager
 from tools import file_manager
+
 
 class EditPersonWindow(QWidget):
     def __init__(self, database, windows_manager):
@@ -90,7 +91,6 @@ class EditPersonWindow(QWidget):
         self.surname_add.setPlaceholderText("Введите фамилию")
         self.surname_add.setValidator(input_restriction)
         self.surname_add.editingFinished.connect(lambda: self.surname_add.setText(self.surname_add.text().title()))
-        # self.surname_add.setText(self.proc.Surname)
         self.surname_add.setObjectName("фамилия")
 
         self.name_add = self.mass_labels[1]
@@ -195,16 +195,13 @@ class EditPersonWindow(QWidget):
         self.date_of_birth_add.setText(proc.Date_of_birth)
         self.place_of_birth_add.setText(proc.Place_of_birth)
         self.issued_by_whom_add.setText(proc.Issued_by_whom)
-        # добавить остальные поля
+        self.date_of_issue_add.setText(proc.Date_of_issue)
 
-
-    # def click_add_img_inn(self):
-    #     QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-    #     # потом переделать, когда Ванина часть будет готова
-
-    # def click_add_img_snils(self):
-    #     QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-    #     # потом переделать, когда Ванина часть будет готова
+    '''def click_add_img_inn(self):
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
+      
+    def click_add_img_snils(self):
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')'''
 
     def click_add_photo_face(self):
         photo_face = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]

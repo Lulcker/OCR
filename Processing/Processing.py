@@ -1,14 +1,11 @@
 from pdf2image import convert_from_path
 from PIL import Image, ImageDraw
 import pytesseract
-from Windows import EditPersonWindow
-import main
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
-
-class Processing():
+class Processing:
 
     def __init__(self, filename):
         self.convert(filename)
@@ -19,7 +16,7 @@ class Processing():
         self.Date_of_birth = date[12]
         self.Issued_by_whom = date[2] + date[3]
         self.Place_of_birth = date[14]
-
+        self.Date_of_issue = date[5].split(" ")[0]
 
     def convert(self,filename):
         images = convert_from_path(filename, poppler_path=r"poppler-22.11.0\Library\bin")

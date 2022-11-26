@@ -29,10 +29,13 @@ class MainWindow(QMainWindow):
     def screen_(self):
         self.setWindowTitle("Scanner")
         self.setFixedSize(QSize(1400, 800))
+        self.statusBar().setMinimumWidth(1400)
+        self.statusBar().setMinimumHeight(800)
+        self.setMaximumWidth(1400)
+        self.setMaximumHeight(800)
 
     def write_text_element(self):
 
-        # displaying the text of the surname, name...
         textData = (
             ("Фамилия:", (350, 50, 200, 30)),
             ("Имя:", (350, 90, 200, 30)),
@@ -69,7 +72,7 @@ class MainWindow(QMainWindow):
         )
 
         input_restriction = QRegExpValidator(QRegExp("[а-яА-Я]{3,}")) # surname, name, fam,
-        date_restriction = QRegExpValidator(QRegExp("^(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[012])\-\d{4}$")) # data_r, date_is
+        date_restriction = QRegExpValidator(QRegExp("^(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[012])\-\d{4}$"))
         passport_restriction = QRegExpValidator(QRegExp("^[0-9]{4}\ [0-9]{6}$"))
         inn_restriction = QRegExpValidator(QRegExp("^[0-9]{12}$"))
         snils_restriction = QRegExpValidator(QRegExp("^[0-9]{3}\-[0-9]{3}\-[0-9]{3}\ [0-9]{2}$"))
