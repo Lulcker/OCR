@@ -1,6 +1,7 @@
 import sqlite3
 import uuid
 
+
 class DataBaseCluster:
 
     def __init__(self, path_to_database):

@@ -3,10 +3,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
-import Processing
 
+from Processing import Processing
 from Windows import WindowsManager
 from tools import file_manager
+
 
 class EditPersonWindow(QWidget):
     def __init__(self, database, windows_manager):
@@ -90,7 +91,6 @@ class EditPersonWindow(QWidget):
         self.surname_add.setPlaceholderText("Введите фамилию")
         self.surname_add.setValidator(input_restriction)
         self.surname_add.editingFinished.connect(lambda: self.surname_add.setText(self.surname_add.text().title()))
-        self.surname_add.setText(Processing.Processing.return_surname())
         self.surname_add.setObjectName("фамилия")
 
         self.name_add = self.mass_labels[1]
@@ -98,7 +98,6 @@ class EditPersonWindow(QWidget):
         self.name_add.setPlaceholderText("Введите имя")
         self.name_add.setValidator(input_restriction)
         self.name_add.editingFinished.connect(lambda: self.name_add.setText(self.name_add.text().title()))
-        self.surname_add.setText(Processing.Processing.return_name())
         self.name_add.setObjectName("имя")
 
         self.patronymic_add = self.mass_labels[2]
@@ -171,13 +170,13 @@ class EditPersonWindow(QWidget):
         self.button_add_image_passport.setGeometry(780, 210, 170, 45)
         self.button_add_image_passport.clicked.connect(self.click_add_img_passport)
 
-        self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
-        self.button_add_image_inn.setGeometry(780, 265, 170, 45)
-        self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
+        # self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
+        # self.button_add_image_inn.setGeometry(780, 265, 170, 45)
+        # self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
 
-        self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
-        self.button_add_image_snils.setGeometry(780, 320, 170, 45)
-        self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
+        # self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
+        # self.button_add_image_snils.setGeometry(780, 320, 170, 45)
+        # self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
 
         self.button_save_add = QPushButton("Сохранить", self)
         self.button_save_add.setGeometry(1000, 210, 150, 30)
@@ -188,17 +187,21 @@ class EditPersonWindow(QWidget):
         self.button_add_image_person.clicked.connect(self.click_add_photo_face)
 
     def click_add_img_passport(self):
-        self.add_img = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'PDF File(*.pdf)')
-        return self.add_img
-        # потом переделать, когда Ванина часть будет готова
+        add_img = QFileDialog.getOpenFileName(self, 'Open File', 'Users/', 'PDF File(*.pdf)')[0]
+        proc = Processing.Processing(str(add_img))
+        self.surname_add.setText(proc.Surname)
+        self.name_add.setText(proc.Name)
+        self.patronymic_add.setText(proc.Patronymic)
+        self.date_of_birth_add.setText(proc.Date_of_birth)
+        self.place_of_birth_add.setText(proc.Place_of_birth)
+        self.issued_by_whom_add.setText(proc.Issued_by_whom)
+        self.date_of_issue_add.setText(proc.Date_of_issue)
 
-    def click_add_img_inn(self):
+    '''def click_add_img_inn(self):
         QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-        # потом переделать, когда Ванина часть будет готова
-
+      
     def click_add_img_snils(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-        # потом переделать, когда Ванина часть будет готова
+        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')'''
 
     def click_add_photo_face(self):
         photo_face = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]
