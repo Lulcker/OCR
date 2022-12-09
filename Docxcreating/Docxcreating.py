@@ -1,6 +1,7 @@
 import docx
 import datetime
 
+
 class Docxcreating:
     def __init__(self,based_id, database):
         self.based_id = based_id
