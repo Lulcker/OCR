@@ -20,9 +20,8 @@ class MainWindow(QMainWindow):
 
         self.row_to_base_id = list()
         self.loaded = 0
-        self.limit = 1
+        self.limit = 10
         self.index_row = -1
-
         self.screen_()
         self.buttons()
         self.write_text_element()
@@ -156,13 +155,6 @@ class MainWindow(QMainWindow):
         self.button_edit_photo.setGeometry(100, 310, 120, 30)
         self.button_edit_photo.clicked.connect(self.click_button_edit_photo)
 
-    def change_sorting_type(self, new_type=SortType.ByUpdated):
-        if self.sorting_type == new_type:
-            return
-        self.sorting_type = new_type
-        self.clear_labels()
-        self.load_data(reset_data=True)
-
     def click_button_sort_name(self):
         self.button_sort_name.setEnabled(False)
         self.button_sort_updated.setEnabled(True)
@@ -190,12 +182,17 @@ class MainWindow(QMainWindow):
         if self.new_photo_path:
             file_manager.save_file(self.new_photo_path, self.row_to_base_id[self.index_row], "photo.jpg")
         self.database.update_person([x.text() for x in self.labels[:-1]], self.row_to_base_id[self.index_row])
-        if self.index_row != 0:
-            self.tableWidget.removeRow(self.index_row)
-            self.tableWidget.insertRow(0)
-        self.row_to_base_id.insert(0, self.row_to_base_id.pop(self.index_row))
-        for i in range(11):
-            self.tableWidget.setItem(0, i, QTableWidgetItem(self.labels[i].text()))
+        if self.sorting_type == SortType.ByUpdated:
+            if self.index_row != 0:
+                self.tableWidget.removeRow(self.index_row)
+                self.tableWidget.insertRow(0)
+            self.row_to_base_id.insert(0, self.row_to_base_id.pop(self.index_row))
+            for i in range(11):
+                self.tableWidget.setItem(0, i, QTableWidgetItem(self.labels[i].text()))
+        else:
+            for i in range(11):
+                self.tableWidget.setItem(self.index_row, i, QTableWidgetItem(self.labels[i].text()))
+
         self.index_row = -1
         self.clear_labels()
 
@@ -247,6 +244,13 @@ class MainWindow(QMainWindow):
 
     def click_edit_records(self):
         self.load_data()
+
+    def change_sorting_type(self, new_type=SortType.ByUpdated):
+        if self.sorting_type == new_type:
+            return
+        self.sorting_type = new_type
+        self.clear_labels()
+        self.load_data(reset_data=True)
 
     def eventFilter(self, source, event):
         if event.type() == QtCore.QEvent.MouseButtonPress:
@@ -313,6 +317,10 @@ class MainWindow(QMainWindow):
             self.row_to_base_id = []
         result = self.database.get_persons(self.loaded, self.limit, self.sorting_type)
         for row_number, row_data in enumerate(result.fetchall()):
+            if row_data[0] in self.row_to_base_id:
+                continue
+            else:
+                self.row_to_base_id.append(row_data[0])
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             self.row_to_base_id.append(row_data[0])
             self.loaded += 1

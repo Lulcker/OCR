@@ -64,8 +64,6 @@ class DataBaseCluster:
                 """
         query += "ORDER BY updated DESC " if sort_type == SortType.ByUpdated else "ORDER BY surname, name_, patronymic "
         query += "LIMIT ? OFFSET ?; "
-
-
         return self.request.execute(
             query,
             [limit, loaded]
