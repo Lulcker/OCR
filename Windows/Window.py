@@ -322,7 +322,6 @@ class MainWindow(QMainWindow):
             else:
                 self.row_to_base_id.append(row_data[0])
             self.tableWidget.insertRow(self.tableWidget.rowCount())
-            self.row_to_base_id.append(row_data[0])
             self.loaded += 1
             for column_number, data in enumerate(row_data[1:12]):
                 self.tableWidget.setItem(

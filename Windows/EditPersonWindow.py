@@ -170,14 +170,6 @@ class EditPersonWindow(QWidget):
         self.button_add_image_passport.setGeometry(780, 210, 170, 45)
         self.button_add_image_passport.clicked.connect(self.click_add_img_passport)
 
-        # self.button_add_image_inn = QPushButton("Добавить фото ИНН\n для сканирования", self)
-        # self.button_add_image_inn.setGeometry(780, 265, 170, 45)
-        # self.button_add_image_inn.clicked.connect(self.click_add_img_inn)
-
-        # self.button_add_image_snils = QPushButton("Добавить фото СНИЛС\n для сканирования", self)
-        # self.button_add_image_snils.setGeometry(780, 320, 170, 45)
-        # self.button_add_image_snils.clicked.connect(self.click_add_img_snils)
-
         self.button_save_add = QPushButton("Сохранить", self)
         self.button_save_add.setGeometry(1000, 210, 150, 30)
         self.button_save_add.clicked.connect(self.click_save_add)
@@ -197,12 +189,6 @@ class EditPersonWindow(QWidget):
         self.issued_by_whom_add.setText(proc.Issued_by_whom)
         self.date_of_issue_add.setText(proc.Date_of_issue)
 
-    '''def click_add_img_inn(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')
-      
-    def click_add_img_snils(self):
-        QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')'''
-
     def click_add_photo_face(self):
         photo_face = QFileDialog.getOpenFileNames(self, 'Open File', 'Users/', 'JPG File(*.jpg);;JPEG File(*.jpeg);;PNG File(*.png)')[0]
         self.photo_add.setText(''.join(photo_face))
@@ -213,7 +199,9 @@ class EditPersonWindow(QWidget):
         if self.check_data():
             person_id = self.database.insert_person(person_data[:-1])
             file_manager.save_file(person_data[11], person_id, "photo.jpg")
-            [x.clear() for x in self.mass_labels]
+            for label in self.mass_labels:
+                label.setInputMask("")
+                label.clear()
             self.photo_person.clear()
             person_data.insert(0, person_id)
             self.windows_manager.get_window(WindowsManager.WindowsNames.MainWindow).add_new_person(person_data[:-1])

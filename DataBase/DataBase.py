@@ -12,23 +12,24 @@ class DataBaseCluster:
     def init_table(self):
         self.request.execute(
             """
-            CREATE TABLE IF NOT EXISTS persons(
-                id TEXT PRIMARY KEY,
-                surname TEXT NOT NULL,
-                name_ TEXT,
-                patronymic TEXT,
-                date_of_birth TEXT,
-                place_of_birth TEXT,
-                place_of_registration TEXT,
-                series_and_number TEXT,
-                issued_by_whom TEXT,
-                date_of_issue TEXT,
-                inn INTEGER,
-                snils TEXT,
-                updated DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+                CREATE TABLE IF NOT EXISTS persons(
+                    id TEXT PRIMARY KEY,
+                    surname TEXT NOT NULL,
+                    name_ TEXT,
+                    patronymic TEXT,
+                    date_of_birth TEXT,
+                    place_of_birth TEXT,
+                    place_of_registration TEXT,
+                    series_and_number TEXT,
+                    issued_by_whom TEXT,
+                    date_of_issue TEXT,
+                    inn INTEGER,
+                    snils TEXT,
+                    updated DATETIME DEFAULT CURRENT_TIMESTAMP
+                );
             """
         )
+
         self.database.commit()
 
     def insert_person(self, person_data):
