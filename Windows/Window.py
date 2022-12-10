@@ -3,10 +3,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
+from enum import Enum
 
 from Windows import WindowsManager
 from tools import file_manager
 
+class SortType(Enum):
+    ByName = 1
+    ByUpdated = 2
 
 class MainWindow(QMainWindow):
     def __init__(self, database, windows_manager):
@@ -15,15 +19,16 @@ class MainWindow(QMainWindow):
         self.database = database
 
         self.row_to_base_id = list()
-        self.last_time_loaded = '2999-01-01 00:00:00'
-        self.limit = 10
+        self.loaded = 0
+        self.limit = 1
         self.index_row = -1
 
         self.screen_()
         self.buttons()
         self.write_text_element()
         self.create_table()
-        self.load_data()
+        self.sorting_type = SortType.ByUpdated
+        self.load_data(reset_data=True)
         self.new_photo_path = ''
 
     def screen_(self):
@@ -117,8 +122,21 @@ class MainWindow(QMainWindow):
 
         self.button_edit = QPushButton("Редактировать", self)
         self.button_edit.setGeometry(900, 250, 150, 30)
-        self.button_edit.setEnabled(False)
         self.button_edit.clicked.connect(self.click_edit)
+
+        label = QLabel("Сортировать по:", self)
+        label.setGeometry(860, 360, 300, 30)
+        label.setFont(QFont("SansSerif", 15))
+        label.setAlignment(Qt.AlignLeft)
+
+        self.button_sort_name = QPushButton("Имени", self)
+        self.button_sort_name.setGeometry(1050, 360, 150, 30)
+        self.button_sort_name.clicked.connect(self.click_button_sort_name)
+
+        self.button_sort_updated = QPushButton("Изменению", self)
+        self.button_sort_updated.setGeometry(1200, 360, 150, 30)
+        self.button_sort_updated.setEnabled(False)
+        self.button_sort_updated.clicked.connect(self.click_button_sort_updated)
 
         self.button_delete = QPushButton("Удалить", self)
         self.button_delete.setGeometry(900, 290, 150, 30)
@@ -137,6 +155,23 @@ class MainWindow(QMainWindow):
         self.button_edit_photo = QPushButton("Изменить фото", self)
         self.button_edit_photo.setGeometry(100, 310, 120, 30)
         self.button_edit_photo.clicked.connect(self.click_button_edit_photo)
+
+    def change_sorting_type(self, new_type=SortType.ByUpdated):
+        if self.sorting_type == new_type:
+            return
+        self.sorting_type = new_type
+        self.clear_labels()
+        self.load_data(reset_data=True)
+
+    def click_button_sort_name(self):
+        self.button_sort_name.setEnabled(False)
+        self.button_sort_updated.setEnabled(True)
+        self.change_sorting_type(SortType.ByName)
+
+    def click_button_sort_updated(self):
+        self.button_sort_updated.setEnabled(False)
+        self.button_sort_name.setEnabled(True)
+        self.change_sorting_type(SortType.ByUpdated)
 
     def click_button_edit_photo(self):
         add_photo_for_edit = QFileDialog.getOpenFileNames(
@@ -162,6 +197,9 @@ class MainWindow(QMainWindow):
         for i in range(11):
             self.tableWidget.setItem(0, i, QTableWidgetItem(self.labels[i].text()))
         self.index_row = -1
+        self.clear_labels()
+
+    def clear_labels(self):
         self.button_save.setEnabled(False)
         self.button_delete.setEnabled(False)
         self.button_edit.setEnabled(False)
@@ -171,8 +209,8 @@ class MainWindow(QMainWindow):
         self.labels[8].setInputMask("")
         self.labels[9].setInputMask("")
         self.labels[10].setInputMask("")
-
-        [x.clear() for x in self.labels]
+        for label in self.labels:
+            label.clear()
         self.enabled_false()
 
     def click_edit(self):
@@ -268,15 +306,16 @@ class MainWindow(QMainWindow):
         for i, col in column:
             self.tableWidget.setColumnWidth(i, col)
 
-    def load_data(self):
-        result = self.database.get_persons(self.last_time_loaded, self.limit)
-        if self.last_time_loaded == '2999-01-01 00:00:00':
+    def load_data(self, reset_data=False):
+        if reset_data:
+            self.loaded = 0
             self.tableWidget.setRowCount(0)
             self.row_to_base_id = []
-        for row_number, row_data in enumerate(result):
+        result = self.database.get_persons(self.loaded, self.limit, self.sorting_type)
+        for row_number, row_data in enumerate(result.fetchall()):
             self.tableWidget.insertRow(self.tableWidget.rowCount())
             self.row_to_base_id.append(row_data[0])
-            self.last_time_loaded = row_data[12]
+            self.loaded += 1
             for column_number, data in enumerate(row_data[1:12]):
                 self.tableWidget.setItem(
                     self.tableWidget.rowCount() - 1,

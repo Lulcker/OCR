@@ -1,7 +1,7 @@
 import sqlite3
 import uuid
 
-
+from Windows.Window import SortType
 class DataBaseCluster:
 
     def __init__(self, path_to_database):
@@ -56,17 +56,19 @@ class DataBaseCluster:
         self.database.commit()
         return id
 
-    def get_persons(self, time, limit):
-        return self.request.execute(
-            """
+    def get_persons(self, loaded, limit, sort_type=SortType.ByUpdated):
+        query = """
                 SELECT 
                     * 
-                FROM persons 
-                WHERE updated < ?
-                ORDER BY updated DESC
-                LIMIT ?;
-            """,
-            [time, limit]
+                FROM persons
+                """
+        query += "ORDER BY updated DESC " if sort_type == SortType.ByUpdated else "ORDER BY surname, name_, patronymic "
+        query += "LIMIT ? OFFSET ?; "
+
+
+        return self.request.execute(
+            query,
+            [limit, loaded]
         )
 
     def delete_person(self, id):
