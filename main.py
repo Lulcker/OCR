@@ -2,6 +2,7 @@ import sys
 from Windows import Window, EditPersonWindow, WindowsManager
 from DataBase import DataBase
 from PyQt5.QtWidgets import *
+from Docxcreating import Docxcreating
 
 
 def main():
@@ -18,7 +19,6 @@ def main():
     windows_manager.windows = windows
     main_window.show()
     app.exec()
-
 
 if __name__ == '__main__':
     main()
