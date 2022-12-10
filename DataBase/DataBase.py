@@ -69,28 +69,6 @@ class DataBaseCluster:
             [time, limit]
         )
 
-    def sorted_surname_asc(self):
-        qq = self.request.execute(
-            """
-                SELECT * 
-                  FROM persons
-                 ORDER BY surname ASC;
-            """
-        )
-        self.database.commit()
-        return qq
-
-    def sorted_surname_desc(self):
-        qq = self.request.execute(
-            """
-                SELECT * 
-                  FROM persons
-                 ORDER BY surname DESC;
-            """
-        )
-        self.database.commit()
-        return qq
-
     def delete_person(self, id):
         self.request.execute("""DELETE FROM persons WHERE id == ?;""", [id])
         self.database.commit()

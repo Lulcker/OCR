@@ -138,24 +138,6 @@ class MainWindow(QMainWindow):
         self.button_edit_photo.setGeometry(100, 310, 120, 30)
         self.button_edit_photo.clicked.connect(self.click_button_edit_photo)
 
-        self.button_asc = QPushButton("Фамилия asc", self)
-        self.button_asc.setGeometry(250, 360, 150, 30)
-        self.button_asc.clicked.connect(self.button_sorted_surname_asc)
-
-        self.button_desc = QPushButton("Фамилия desc", self)
-        self.button_desc.setGeometry(420, 360, 150, 30)
-        self.button_desc.clicked.connect(self.button_sorted_surname_desc)
-
-    def button_sorted_surname_asc(self):
-        self.database.sorted_surname_asc()
-        self.tableWidget.setSortingEnabled(True)
-        self.tableWidget.sortItems(0, Qt.AscendingOrder)
-
-    def button_sorted_surname_desc(self):
-        self.database.sorted_surname_desc()
-        self.tableWidget.setSortingEnabled(True)
-        self.tableWidget.sortItems(0, Qt.DescendingOrder)
-
     def click_button_edit_photo(self):
         add_photo_for_edit = QFileDialog.getOpenFileNames(
             self,
@@ -236,6 +218,7 @@ class MainWindow(QMainWindow):
                     return super(MainWindow, self).eventFilter(source, event)
                 self.index_row = index.row()
                 self.new_photo_path = ''
+                # parsing table
                 for i in range(11):
                     self.labels[i].setText(self.tableWidget.item(self.index_row, i).text())
                 self.photo_bd.setPixmap(
