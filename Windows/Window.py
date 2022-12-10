@@ -7,6 +7,7 @@ from enum import Enum
 
 from Windows import WindowsManager
 from tools import file_manager
+from Docxcreating import Docxcreating
 
 class SortType(Enum):
     ByName = 1
@@ -115,6 +116,12 @@ class MainWindow(QMainWindow):
 
     def buttons(self):
 
+
+        self.button_word = QPushButton("Word", self)
+        self.button_word.setGeometry(1120, 250, 150, 30)
+        self.button_word.setEnabled(False)
+        self.button_word.clicked.connect(self.click_button_word)
+
         self.button_add = QPushButton("Добавить файл", self)
         self.button_add.setGeometry(900, 210, 150, 30)
         self.button_add.clicked.connect(self.click_add)
@@ -179,6 +186,7 @@ class MainWindow(QMainWindow):
         self.windows_manager.show_window(WindowsManager.WindowsNames.EditPersonWindow)
 
     def click_save(self):
+        self.button_word.setEnabled(False)
         if self.new_photo_path:
             file_manager.save_file(self.new_photo_path, self.row_to_base_id[self.index_row], "photo.jpg")
         self.database.update_person([x.text() for x in self.labels[:-1]], self.row_to_base_id[self.index_row])
@@ -217,6 +225,9 @@ class MainWindow(QMainWindow):
         self.button_save.setEnabled(True)
         self.button_edit_photo.setEnabled(True)
 
+    def click_button_word(self):
+        Docxcreating.Docxcreating(self.index_row, self.database)
+
     def click_delete_person(self):
         self.msg_delete = QMessageBox()
         self.msg_delete.setWindowTitle("Удаление")
@@ -237,6 +248,7 @@ class MainWindow(QMainWindow):
             self.button_delete.setEnabled(False)
             self.button_save.setEnabled(False)
             self.button_edit.setEnabled(False)
+            self.button_word.setEnabled(False)
             for line in self.labels:
                 line.setText('')
         if res == QMessageBox.Cancel:
@@ -274,9 +286,11 @@ class MainWindow(QMainWindow):
                 if index.data():
                     self.button_edit.setEnabled(True)
                     self.button_delete.setEnabled(True)
+                    self.button_word.setEnabled(True)
                 elif not index.data():
                     self.button_edit.setEnabled(False)
                     self.button_delete.setEnabled(False)
+                    self.button_word.setEnabled(False)
 
         return super(MainWindow, self).eventFilter(source, event)
 
