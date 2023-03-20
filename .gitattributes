@@ -1,0 +1,5 @@
+*.python linguist-detectable=true
+*.c linguist-detectable=false
+*.cpp linguist-detectable=false
+*.roff linguist-detectable=false
+*.other linguist-detectable=false
